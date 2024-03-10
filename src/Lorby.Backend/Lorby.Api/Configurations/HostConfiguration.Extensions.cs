@@ -5,9 +5,12 @@ using Lorby.Api.SeedData;
 using Lorby.Application.Common.Identity;
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Application.Common.Identity.Settings;
+using Lorby.Application.Common.Notification.Brokers;
 using Lorby.Application.Common.Notification.Services;
+using Lorby.Application.Common.Verifications.Services;
 using Lorby.Infrastructure.Common.Identity.Services;
 using Lorby.Infrastructure.Common.Verifications.Services;
+using Lorby.Infrastructure.Notifications.Brokers;
 using Lorby.Infrastructure.Notifications.Services;
 using Lorby.Infrastructure.Settings;
 using Lorby.Persistence.DataContext;
@@ -188,27 +191,31 @@ public static partial class HostConfiguration
     /// <returns></returns>
     private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
     {
-        // Configure SmtpEmailSenderSettings 
+        // configure SmtpEmailSenderSettings 
         builder.Services.Configure<SmtpEmailSenderSettings>(
             builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)));
 
-        // Add EmailTemplateRepository to DI as a Scoped service
-        builder.Services
-               .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
+        // register repositories
+        builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
         
-        // Add EmailTemplateService to DI as a Scoped service
+        // register brokers
+        builder.Services.AddTransient<IEmailSenderBroker, SmtpEmailSenderBroker>();
+        
+        // register services
         builder.Services
-               .AddScoped<IEmailTemplateService, EmailTemplateService>();
+               .AddScoped<IEmailTemplateService, EmailTemplateService>()
+               .AddScoped<IEmailOrchestrationService, EmailOrchestrationService>();
         
         return builder;
     }
     
     private static WebApplicationBuilder AddVerificationInfrastructure(this WebApplicationBuilder builder)
     {
-
+        // register repositories
         builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
 
-        builder.Services.AddScoped<VerificationCodeService, VerificationCodeService>();
+        // register services
+        builder.Services.AddScoped<IVerificationCodeService, VerificationCodeService>();
 
         return builder;
     }
