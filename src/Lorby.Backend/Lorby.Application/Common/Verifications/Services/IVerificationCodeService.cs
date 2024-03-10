@@ -29,7 +29,7 @@ public interface IVerificationCodeService
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>A <see cref="ValueTask{TResult}"/> representing the asynchronous operation.
     /// The result is the created user information verification code.</returns>
-    ValueTask<VerificationCode> CreateAsync(VerificationCode codeType, Guid userId, CancellationToken cancellationToken = default);
+    ValueTask<VerificationCode> CreateAsync(Guid userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deactivates user information verification codes associated with the specified user asynchronously.

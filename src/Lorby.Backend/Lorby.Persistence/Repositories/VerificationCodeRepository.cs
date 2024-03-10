@@ -12,23 +12,19 @@ namespace Lorby.Persistence.Repositories;
 public class VerificationCodeRepository(AppDbContext appDbContext) : EntityRepositoryBase<VerificationCode, AppDbContext>(appDbContext), IVerificationCodeRepository
 {
     /// <inheritdoc/>
-    public new IQueryable<VerificationCode> Get(Expression<Func<VerificationCode, bool>>? predicate = default,
-                                                bool asNoTracking = false)
+    public new IQueryable<VerificationCode> Get(Expression<Func<VerificationCode, bool>>? predicate = default, bool asNoTracking = false)
         => base.Get(predicate, asNoTracking);
 
     /// <inheritdoc/>
-    public new ValueTask<VerificationCode?> GetByIdAsync(Guid codeId, bool asNoTracking = false,
-                                                         CancellationToken cancellationToken = default)
+    public new ValueTask<VerificationCode?> GetByIdAsync(Guid codeId, bool asNoTracking = false, CancellationToken cancellationToken = default)
         => base.GetByIdAsync(codeId, asNoTracking, cancellationToken);
 
     /// <inheritdoc/>
-    public new ValueTask<VerificationCode> CreateAsync(VerificationCode verificationCode, bool saveChanges = true,
-                                                       CancellationToken cancellationToken = default)
+    public new ValueTask<VerificationCode> CreateAsync(VerificationCode verificationCode, bool saveChanges = true, CancellationToken cancellationToken = default)
         => base.CreateAsync(verificationCode, saveChanges, cancellationToken);
 
     /// <inheritdoc/>
-    public async ValueTask DeactivateAsync(Guid codeId, bool saveChanges = true,
-                                           CancellationToken cancellationToken = default)
+    public async ValueTask DeactivateAsync(Guid codeId, bool saveChanges = true, CancellationToken cancellationToken = default)
     {
         var foundVerificationCode = await DbContext.Verifications.FirstOrDefaultAsync(code => code.Id == codeId, cancellationToken)
                                     ?? throw new FileNotFoundException(nameof(codeId));

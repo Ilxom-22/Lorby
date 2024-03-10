@@ -3,7 +3,6 @@ using Lorby.Application.Common.Verifications.Services;
 using Lorby.Domain.Entities;
 using Lorby.Persistence.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Lorby.Infrastructure.Common.Verifications.Services;
 
@@ -36,15 +35,15 @@ public class VerificationCodeService(IVerificationCodeRepository verificationCod
         return (verificationCode, verificationCode.IsActive && verificationCode.ExpiryTime > DateTimeOffset.UtcNow);
     }
 
-    public async ValueTask<VerificationCode> CreateAsync(VerificationCode codeType, Guid userId,
+    public async ValueTask<VerificationCode> CreateAsync(Guid userId,
                                                          CancellationToken cancellationToken = default)
     {
         var verificationCode = new VerificationCode()
         {
             UserId = userId,
-            Code = codeType.Code,
+            Code = Generate(),
             ExpiryTime = DateTimeOffset.UtcNow.AddMinutes(2),
-            IsActive = true,
+            IsActive = true
         };
 
         await verificationCodeRepository.CreateAsync(verificationCode, cancellationToken: cancellationToken);
