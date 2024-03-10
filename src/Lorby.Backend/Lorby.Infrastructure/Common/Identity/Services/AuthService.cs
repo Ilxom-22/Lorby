@@ -45,9 +45,6 @@ public class AuthService(
         if (foundUser is null || !passwordHasherService.ValidatePassword(signInDetails.Password, foundUser.PasswordHash))
             throw new AuthenticationException("Sign in details are invalid, contact support.");
 
-        if (!foundUser.IsEmailAddressVerified)
-            throw new AuthenticationException("Email address is not verified");
-
         return accessTokenGeneratorService.GetToken(foundUser);
     }
 
