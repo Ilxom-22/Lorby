@@ -1,8 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Lorby.Domain.Entities;
 
-namespace Lorby.Application.Users.Services;
-
+namespace Lorby.Application.Common.Identity.Services;
 
 /// <summary>
 ///     Provides operations for managing users.

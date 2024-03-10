@@ -3,7 +3,7 @@ using Lorby.Application.Common.Identity.Services;
 using Lorby.Domain.Entities;
 using Lorby.Persistence.Repositories.Interfaces;
 
-namespace Lorby.Infrastructure.Users.Services;
+namespace Lorby.Infrastructure.Common.Identity.Services;
 
 /// <summary>
 /// Represents a service for managing users.
