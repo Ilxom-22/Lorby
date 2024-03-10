@@ -20,4 +20,9 @@ public class UserService(IUserRepository userRepository) : IUserService
     public ValueTask<User> CreateAsync(User user, bool saveChanges = true,
                                        CancellationToken cancellationToken = default)
         => userRepository.CreateAsync(user, saveChanges, cancellationToken);
+
+    public ValueTask<User> UpdateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default)
+    {
+        return userRepository.UpdateAsync(user, saveChanges, cancellationToken);
+    }
 }
