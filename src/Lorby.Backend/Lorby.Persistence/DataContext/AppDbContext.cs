@@ -1,4 +1,4 @@
-﻿using Lorby.Domain.Entities;
+using Lorby.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lorby.Persistence.DataContext;
@@ -13,6 +13,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> dbContext) : DbContext(
     public DbSet<AccessToken> AccessTokens => Set<AccessToken>();
 
     DbSet<EmailTemplate> EmailTemplates => Set<EmailTemplate>();
+    
+    public DbSet<VerificationCode> Verifications => Set<VerificationCode>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
