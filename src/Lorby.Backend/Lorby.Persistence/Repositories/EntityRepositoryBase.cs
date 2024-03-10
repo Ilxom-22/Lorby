@@ -83,7 +83,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext> where TEntity : cl
         return entity;
     }
 
-    public async ValueTask<TEntity> DeleteAsync(
+    public async ValueTask<TEntity?> DeleteAsync(
         TEntity entity,
         bool saveChanges = true,
         CancellationToken cancellationToken = default
