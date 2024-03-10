@@ -6,6 +6,7 @@ public static partial class HostConfiguration
     {
         builder
             .AddDevTools()
+            .AddPersistence()
             .AddExposers();
 
         return new(builder);

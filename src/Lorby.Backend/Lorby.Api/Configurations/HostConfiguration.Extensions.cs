@@ -1,4 +1,6 @@
 using System.Reflection;
+using Lorby.Persistence.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lorby.Api.Configurations;
 
@@ -34,6 +36,18 @@ public static partial class HostConfiguration
     {
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
         builder.Services.AddControllers();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Configures database for the project
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("LorbyDatabase"));
 
         return builder;
     }
