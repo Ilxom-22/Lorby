@@ -9,6 +9,8 @@ namespace Lorby.Persistence.DataContext;
 public class AppDbContext(DbContextOptions<AppDbContext> dbContext) : DbContext(dbContext)
 {
     DbSet<User> Users => Set<User>(); 
+
+    DbSet<EmailTemplate> EmailTemplates => Set<EmailTemplate>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
