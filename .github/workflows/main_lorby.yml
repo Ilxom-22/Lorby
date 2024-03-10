@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: Lorby
+  AZURE_WEBAPP_NAME: LorbyApp
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
   DOTNET_VERSION: '8.0.x'
   APPLICATION_SOLUTION_FILE: ./src/Lorby.Backend/Lorby.sln
