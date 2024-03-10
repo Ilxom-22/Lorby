@@ -1,5 +1,6 @@
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Application.Common.Notification.Services;
+using Lorby.Application.Common.Verifications.Services;
 using Lorby.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,8 @@ namespace Lorby.Infrastructure.Common.Identity.Services;
 
 public class AccountService(
     IUserService userService,
-    IEmailOrchestrationService emailOrchestrationService) 
+    IEmailOrchestrationService emailOrchestrationService,
+    IVerificationCodeService verificationCodeService) 
     : IAccountService
 {
     public async ValueTask<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default)
@@ -34,9 +36,20 @@ public class AccountService(
         return createdUser;
     }
 
-    public ValueTask<bool> VerifyAsync(string verificationCode, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> VerifyAsync(Guid userId, string verificationCode, CancellationToken cancellationToken = default)
     {
-        // TODO: send verification email
-        throw new NotImplementedException();
+        var foundVerificationCode = await verificationCodeService.GetByCodeAsync(verificationCode, cancellationToken);
+
+        if (!foundVerificationCode.IsValid || foundVerificationCode.Code.UserId != userId)
+            throw new InvalidOperationException("Invalid verification code");
+
+        var foundUser = await userService.GetByIdAsync(userId, cancellationToken: cancellationToken)
+                        ?? throw new ArgumentException($"User with id {userId} not found!");
+
+        foundUser.IsEmailAddressVerified = true;
+
+        await userService.UpdateAsync(foundUser, cancellationToken: cancellationToken);
+
+        return true;
     }
 }

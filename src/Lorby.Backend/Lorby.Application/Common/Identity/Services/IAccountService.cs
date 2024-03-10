@@ -35,7 +35,8 @@ public interface IAccountService
     /// Verifies User email address using verification code
     /// </summary>
     /// <param name="verificationCode"></param>
+    /// <param name="userId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    ValueTask<bool> VerifyAsync(string verificationCode, CancellationToken cancellationToken = default);
+    ValueTask<bool> VerifyAsync(Guid userId, string verificationCode, CancellationToken cancellationToken = default);
 }
