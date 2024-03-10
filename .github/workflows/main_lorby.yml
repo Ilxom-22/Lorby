@@ -3,12 +3,6 @@ name: Build and deploy ASP.Net Core app to Azure Web App - Lorby
 on:
   push:
     branches: ["main"]
-    paths:
-      - 'src/Todo.ServerApp/**'
-  pull_request: 
-    branches: ["main"]
-    paths:
-        - 'src/Todo.ServerApp/**'
   workflow_dispatch:
 
 env:
