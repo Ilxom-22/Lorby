@@ -21,4 +21,10 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         return Ok(await authService.SignInAsync(signInDetails, cancellationToken));
     }
+
+    [HttpPost("LogOut/{token}")]
+    public async ValueTask<IActionResult> LogOutAsync([FromRoute] string token, CancellationToken cancellationToken = default)
+    {
+        return Ok(await authService.LogOutAsync(token, cancellationToken: cancellationToken));
+    }
 }

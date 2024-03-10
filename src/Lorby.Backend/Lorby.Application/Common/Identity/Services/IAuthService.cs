@@ -24,4 +24,12 @@ public interface IAuthService
     /// <returns></returns>
     public ValueTask<string> SignInAsync(SignInDetails signInDetails, 
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously attempts to log out a user
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    ValueTask<bool> LogOutAsync(string token, CancellationToken cancellationToken = default);
 }
