@@ -5,6 +5,7 @@ using Lorby.Application.Common.Identity;
 using Lorby.Application.Common.Identity.Models;
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Domain.Entities;
+using Lorby.Persistence.Repositories.Interfaces;
 
 namespace Lorby.Infrastructure.Common.Identity.Services;
 
@@ -13,7 +14,8 @@ public class AuthService(
     IMapper mapper,
     IPasswordHasherService passwordHasherService,
     IAccessTokenGeneratorService accessTokenGeneratorService,
-    IValidator<SignUpDetails> signUpDetailsValidator) 
+    IValidator<SignUpDetails> signUpDetailsValidator,
+    IAccessTokenRepository accessTokenRepository) 
     : IAuthService
 {
     public async ValueTask<bool> SignUpAsync(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
@@ -45,7 +47,31 @@ public class AuthService(
         if (foundUser is null || !passwordHasherService.ValidatePassword(signInDetails.Password, foundUser.PasswordHash))
             throw new AuthenticationException("Sign in details are invalid, contact support.");
 
+        var rawAccessToken = accessTokenGeneratorService.GetToken(foundUser);
+
+        var accessToken = new AccessToken
+        {
+            Id = Guid.NewGuid(),
+            ExpiryTime = DateTimeOffset.Now.AddSeconds(1440),
+            Token = rawAccessToken,
+            UserId = foundUser.Id
+        };
+
+        await accessTokenRepository.CreateAsync(accessToken, cancellationToken: cancellationToken);
+        
         return accessTokenGeneratorService.GetToken(foundUser);
+    }
+
+    public async ValueTask<bool> LogOutAsync(string token, CancellationToken cancellationToken = default)
+    {
+        var foundToken = await accessTokenRepository.GetByToken(token, cancellationToken: cancellationToken);
+
+        if (foundToken is null)
+            throw new ArgumentException("Access Token does not exist!");
+
+        var disableAccessToken = await accessTokenRepository.DeleteByIdAsync(foundToken.Id, cancellationToken);
+
+        return disableAccessToken is not null;
     }
 
     private async ValueTask ValidateUserExistence(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
