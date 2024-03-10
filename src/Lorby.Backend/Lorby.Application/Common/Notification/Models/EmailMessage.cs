@@ -28,11 +28,6 @@ public class EmailMessage
     public string ReceiverEmailAddress { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets email template of the email message
-    /// </summary>
-    public EmailTemplate Template { get; set; } = default!;
-
-    /// <summary>
     /// Gets or sets subject of the email message
     /// </summary>
     public string Subject { get; set; } = default!;
@@ -41,14 +36,6 @@ public class EmailMessage
     /// Gets or sets body of the email message
     /// </summary>
     public string Body { get; set; } = default!;
-
-    /// <summary>
-    /// Gets or sets variables of the notification message
-    /// </summary>
-    /// <remarks>
-    /// These variables is needed for rendering message
-    /// </remarks>
-    public Dictionary<string, string> Variables { get; set; } = default!;
     
     /// <summary>
     /// Gets or sets if the notification message is send successfully or not

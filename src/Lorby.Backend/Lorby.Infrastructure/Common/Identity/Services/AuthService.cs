@@ -18,7 +18,7 @@ public class AuthService(
     IAccessTokenRepository accessTokenRepository) 
     : IAuthService
 {
-    public async ValueTask<bool> SignUpAsync(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
+    public async ValueTask<Guid> SignUpAsync(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
     {
         await ValidateUserExistence(signUpDetails, cancellationToken);
 
@@ -34,9 +34,9 @@ public class AuthService(
         
         user.PasswordHash = passwordHasherService.HashPassword(signUpDetails.Password);
         
-        await accountService.CreateUserAsync(user, cancellationToken);
+        var createdUser = await accountService.CreateUserAsync(user, cancellationToken);
 
-        return true;
+        return createdUser.Id;
     }
 
     public async ValueTask<string> SignInAsync(SignInDetails signInDetails, CancellationToken cancellationToken = default)

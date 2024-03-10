@@ -13,7 +13,7 @@ public interface IAuthService
     /// <param name="signUpDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public ValueTask<bool> SignUpAsync(SignUpDetails signUpDetails,
+    public ValueTask<Guid> SignUpAsync(SignUpDetails signUpDetails,
         CancellationToken cancellationToken = default);
 
     /// <summary>

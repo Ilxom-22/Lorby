@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <Folder Include="Common\Notification\Models\" />
-      <Folder Include="Common\Notification\Services\" />
     </ItemGroup>
 
 </Project>
