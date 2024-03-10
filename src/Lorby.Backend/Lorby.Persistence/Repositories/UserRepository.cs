@@ -32,5 +32,5 @@ public class UserRepository(AppDbContext dbContext)
 
     public new ValueTask<User?> DeleteByIdAsync(Guid userId, bool saveChanges = true,
                                                 CancellationToken cancellationToken = default)
-        => base.GetByIdAsync(userId, saveChanges, cancellationToken);
+        => base.DeleteByIdAsync(userId, saveChanges, cancellationToken);
 }
