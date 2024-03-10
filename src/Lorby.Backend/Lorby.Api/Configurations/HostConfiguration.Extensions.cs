@@ -1,5 +1,8 @@
 using System.Reflection;
+using Lorby.Application.Common.Identity;
+using Lorby.Infrastructure.Common.Identity.Services;
 using Lorby.Persistence.DataContext;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lorby.Api.Configurations;
@@ -48,6 +51,14 @@ public static partial class HostConfiguration
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("LorbyDatabase"));
+
+        return builder;
+    }
+
+    private static WebApplicationBuilder AddIdentityInfrastructure(this WebApplicationBuilder builder)
+    {
+        // add helper services
+        builder.Services.AddTransient<IPasswordHasherService, PasswordHasherService>();
 
         return builder;
     }
