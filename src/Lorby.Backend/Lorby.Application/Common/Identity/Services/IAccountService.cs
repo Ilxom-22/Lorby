@@ -37,5 +37,5 @@ public interface IAccountService
     /// <param name="verificationCode"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    ValueTask<bool> VerificateAsync(string verificationCode, CancellationToken cancellationToken = default);
+    ValueTask<bool> VerifyAsync(string verificationCode, CancellationToken cancellationToken = default);
 }
