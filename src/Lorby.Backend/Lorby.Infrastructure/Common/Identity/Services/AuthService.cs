@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using AutoMapper;
 using FluentValidation;
 using Lorby.Application.Common.Identity;
@@ -36,9 +37,18 @@ public class AuthService(
         return true;
     }
 
-    public ValueTask<string> SignInAsync(SignInDetails signInDetails, CancellationToken cancellationToken = default)
+    public async ValueTask<string> SignInAsync(SignInDetails signInDetails, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var foundUser = await accountService
+            .GetByUsernameAsync(signInDetails.UserName, cancellationToken);
+        
+        if (foundUser is null || !passwordHasherService.ValidatePassword(signInDetails.Password, foundUser.PasswordHash))
+            throw new AuthenticationException("Sign in details are invalid, contact support.");
+
+        if (!foundUser.IsEmailAddressVerified)
+            throw new AuthenticationException("Email address is not verified");
+
+        return accessTokenGeneratorService.GetToken(foundUser);
     }
 
     private async ValueTask ValidateUserExistence(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)

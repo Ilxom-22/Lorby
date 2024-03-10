@@ -8,10 +8,17 @@ namespace Lorby.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("SignUp")]
     public async ValueTask<IActionResult> SignUpAsync([FromBody] SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
     {
         await authService.SignUpAsync(signUpDetails, cancellationToken);
         return NoContent();
+    }
+
+    [HttpPost("SignIn")]
+    public async ValueTask<IActionResult> SignInAsync([FromBody] SignInDetails signInDetails,
+        CancellationToken cancellationToken = default)
+    {
+        return Ok(await authService.SignInAsync(signInDetails, cancellationToken));
     }
 }
