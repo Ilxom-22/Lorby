@@ -6,6 +6,8 @@ public static partial class HostConfiguration
     {
         builder
             .AddDevTools()
+            .AddMappers()
+            .AddValidators()
             .AddPersistence()
             .AddIdentityInfrastructure()
             .AddExposers();

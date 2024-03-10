@@ -1,9 +1,16 @@
 using System.Reflection;
+using System.Text;
+using FluentValidation;
 using Lorby.Application.Common.Identity;
+using Lorby.Application.Common.Identity.Services;
+using Lorby.Application.Common.Identity.Settings;
 using Lorby.Infrastructure.Common.Identity.Services;
 using Lorby.Persistence.DataContext;
-using Microsoft.AspNetCore.Identity;
+using Lorby.Persistence.Repositories;
+using Lorby.Persistence.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Lorby.Api.Configurations;
 
@@ -42,6 +49,28 @@ public static partial class HostConfiguration
 
         return builder;
     }
+    
+    /// <summary>
+    /// Configures AutoMapper for object-to-object mapping using the specified profile.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddMappers(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAutoMapper(Assemblies);
+        return builder;
+    }
+    
+    /// <summary>
+    /// Configures the Dependency Injection container to include validators from referenced assemblies.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddValidators(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddValidatorsFromAssemblies(Assemblies);
+        return builder;
+    }
 
     /// <summary>
     /// Configures database for the project
@@ -55,10 +84,53 @@ public static partial class HostConfiguration
         return builder;
     }
 
+    /// <summary>
+    /// Configures identity related services
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
     private static WebApplicationBuilder AddIdentityInfrastructure(this WebApplicationBuilder builder)
     {
-        // add helper services
+        // configure settings
+        builder.Services.Configure<ValidationSettings>(builder.Configuration.GetSection(nameof(ValidationSettings)));
+        
+        // configure jwt settings
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(JwtSettings)));
+        
+        var jwtSettings = new JwtSettings();
+        builder.Configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = jwtSettings.ValidateIssuer,
+                    ValidIssuer = jwtSettings.ValidIssuer,
+                    ValidAudience = jwtSettings.ValidAudience,
+                    ValidateAudience = jwtSettings.ValidateAudience,
+                    ValidateLifetime = jwtSettings.ValidateLifetime,
+                    ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                };
+            });
+        
+        // register helper services
         builder.Services.AddTransient<IPasswordHasherService, PasswordHasherService>();
+        builder.Services.AddTransient<IAccessTokenGeneratorService, AccessTokenGeneratorService>();
+        
+        // register repositories
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        
+        // register services
+        builder.Services
+            .AddScoped<IUserService, UserService>()
+            .AddScoped<IAccountService, AccountService>()
+            .AddScoped<IAuthService, AuthService>();
+        
+        
 
         return builder;
     }
