@@ -10,6 +10,7 @@ public static partial class HostConfiguration
             .AddValidators()
             .AddPersistence()
             .AddIdentityInfrastructure()
+            .AddNotificationInfrastructure()
             .AddExposers();
 
         return new(builder);
