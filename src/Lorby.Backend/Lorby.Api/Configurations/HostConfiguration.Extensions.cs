@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using FluentValidation;
+using Lorby.Api.SeedData;
 using Lorby.Application.Common.Identity;
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Application.Common.Identity.Settings;
@@ -11,7 +12,6 @@ using Lorby.Infrastructure.Settings;
 using Lorby.Persistence.DataContext;
 using Lorby.Persistence.Repositories;
 using Lorby.Persistence.Repositories.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -86,6 +86,19 @@ public static partial class HostConfiguration
         builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("LorbyDatabase"));
 
         return builder;
+    }
+    
+    /// <summary>
+    /// Seeds data into the application's database by creating a service scope and initializing the seed operation.
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
+    private static async ValueTask<WebApplication> SeedDataAsync(this WebApplication app)
+    {
+        var serviceScope = app.Services.CreateScope();
+        await serviceScope.ServiceProvider.InitializeSeedAsync();
+
+        return app;
     }
 
     /// <summary>

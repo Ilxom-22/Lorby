@@ -12,7 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> dbContext) : DbContext(
 
     public DbSet<AccessToken> AccessTokens => Set<AccessToken>();
 
-    DbSet<EmailTemplate> EmailTemplates => Set<EmailTemplate>();
+    public DbSet<EmailTemplate> EmailTemplates => Set<EmailTemplate>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
