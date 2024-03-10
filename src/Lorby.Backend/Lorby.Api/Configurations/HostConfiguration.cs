@@ -8,6 +8,7 @@ public static partial class HostConfiguration
             .AddDevTools()
             .AddPersistence()
             .AddIdentityInfrastructure()
+            .AddNotificationInfrastructure()
             .AddExposers();
 
         return new(builder);

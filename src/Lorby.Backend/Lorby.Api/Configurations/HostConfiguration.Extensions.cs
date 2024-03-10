@@ -1,7 +1,12 @@
 using System.Reflection;
 using Lorby.Application.Common.Identity;
+using Lorby.Application.Common.Notification.Services;
 using Lorby.Infrastructure.Common.Identity.Services;
+using Lorby.Infrastructure.Notifications.Services;
+using Lorby.Infrastructure.Settings;
 using Lorby.Persistence.DataContext;
+using Lorby.Persistence.Repositories;
+using Lorby.Persistence.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -87,4 +92,28 @@ public static partial class HostConfiguration
 
         return app;
     }
+    
+    // <summary>
+    /// Registers NotificationDbContext in DI 
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
+    {
+        // Configure SmtpEmailSenderSettings 
+        builder.Services.Configure<SmtpEmailSenderSettings>(
+            builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)));
+
+        // Add EmailTemplateRepository to DI as a Scoped service
+        builder.Services
+               .AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
+        
+        // Add EmailTemplateService to DI as a Scoped service
+        builder.Services
+               .AddScoped<IEmailTemplateService, EmailTemplateService>();
+        
+        
+        return builder;
+    }
+
 }
