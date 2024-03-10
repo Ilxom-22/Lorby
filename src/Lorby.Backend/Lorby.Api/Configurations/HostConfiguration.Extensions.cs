@@ -7,6 +7,7 @@ using Lorby.Application.Common.Identity.Services;
 using Lorby.Application.Common.Identity.Settings;
 using Lorby.Application.Common.Notification.Services;
 using Lorby.Infrastructure.Common.Identity.Services;
+using Lorby.Infrastructure.Common.Verifications.Services;
 using Lorby.Infrastructure.Notifications.Services;
 using Lorby.Infrastructure.Settings;
 using Lorby.Persistence.DataContext;
@@ -199,7 +200,16 @@ public static partial class HostConfiguration
         builder.Services
                .AddScoped<IEmailTemplateService, EmailTemplateService>();
         
-        
+        return builder;
+    }
+    
+    private static WebApplicationBuilder AddVerificationInfrastructure(this WebApplicationBuilder builder)
+    {
+
+        builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
+
+        builder.Services.AddScoped<VerificationCodeService, VerificationCodeService>();
+
         return builder;
     }
 
