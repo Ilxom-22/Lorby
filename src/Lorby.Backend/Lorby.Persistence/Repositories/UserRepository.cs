@@ -1,4 +1,5 @@
-﻿using Lorby.Domain.Entities;
+﻿using System.Linq.Expressions;
+using Lorby.Domain.Entities;
 using Lorby.Persistence.DataContext;
 using Lorby.Persistence.Repositories.Interfaces;
 
@@ -10,6 +11,9 @@ namespace Lorby.Persistence.Repositories;
 public class UserRepository(AppDbContext dbContext)
     : EntityRepositoryBase<User, AppDbContext>(dbContext), IUserRepository
 {
+    public new IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false)
+        => base.Get(predicate, asNoTracking);
+    
     public new ValueTask<User?> GetByIdAsync(Guid userId, bool asNoTracking = false,
                                              CancellationToken cancellationToken = default)
         => base.GetByIdAsync(userId, asNoTracking, cancellationToken);

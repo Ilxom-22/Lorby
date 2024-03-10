@@ -1,4 +1,5 @@
-﻿using Lorby.Domain.Entities;
+﻿using System.Linq.Expressions;
+using Lorby.Domain.Entities;
 
 namespace Lorby.Persistence.Repositories.Interfaces;
 
@@ -7,6 +8,14 @@ namespace Lorby.Persistence.Repositories.Interfaces;
 /// </summary>
 public interface IUserRepository
 {
+    /// <summary>
+    /// Retrieves queryable list of users based on the provided predicate
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="asNoTracking"></param>
+    /// <returns></returns>
+    public new IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false);
+    
     /// <summary>
     /// Retrieves a user by their unique identifier 
     /// </summary>
