@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
-using Lorby.Application.Common.Identity.Services;
+using Lorby.Application.Users.Services;
 using Lorby.Domain.Entities;
 using Lorby.Persistence.Repositories.Interfaces;
 
-namespace Lorby.Infrastructure.Users.Services;
+namespace Lorby.Infrastructure.Common.Identity.Services;
 
 /// <summary>
 /// Represents a service for managing users.
