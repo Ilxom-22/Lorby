@@ -122,11 +122,14 @@ public static partial class HostConfiguration
             });
         
         // register helper services
-        builder.Services.AddTransient<IPasswordHasherService, PasswordHasherService>();
-        builder.Services.AddTransient<IAccessTokenGeneratorService, AccessTokenGeneratorService>();
+        builder.Services
+            .AddTransient<IPasswordHasherService, PasswordHasherService>()
+            .AddTransient<IAccessTokenGeneratorService, AccessTokenGeneratorService>();
         
         // register repositories
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IAccessTokenRepository, AccessTokenRepository>();
         
         // register services
         builder.Services
@@ -164,7 +167,7 @@ public static partial class HostConfiguration
         return app;
     }
     
-    // <summary>
+    /// <summary>
     /// Registers NotificationDbContext in DI 
     /// </summary>
     /// <param name="builder"></param>
