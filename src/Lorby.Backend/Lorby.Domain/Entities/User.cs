@@ -12,20 +12,10 @@ namespace Lorby.Domain.Entities;
 public class User : Entity
 {
     /// <summary>
-    /// Gets or sets the full name of the user.
+    /// Gets or sets the unique username of the user.
     /// </summary>
-    public string FirstName { get; set; } = default!;
-
-    /// <summary>
-    /// Gets or sets the last name of the user.
-    /// </summary>
-    public string LastName { get; set; } = default!;
-
-    /// <summary>
-    /// Gets the full name of the user.
-    /// </summary>
-    public string FullName => $"{FirstName} {LastName}";
-
+    public string UserName { get; set; } = default!;
+    
     /// <summary>
     /// Gets or sets the email address of the user.
     /// </summary>
