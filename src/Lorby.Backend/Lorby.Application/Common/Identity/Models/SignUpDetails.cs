@@ -3,7 +3,7 @@ namespace Lorby.Application.Common.Identity.Models;
 /// <summary>
 /// Represents sign up details for authorization
 /// </summary>
-public class SingUpDetails
+public class SignUpDetails
 {
     /// <summary>
     /// Gets or sets the username of the user
