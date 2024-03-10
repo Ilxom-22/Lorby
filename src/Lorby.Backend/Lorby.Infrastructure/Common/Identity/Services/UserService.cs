@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Lorby.Application.Users.Services;
+using Lorby.Application.Common.Identity.Services;
 using Lorby.Domain.Entities;
 using Lorby.Persistence.Repositories.Interfaces;
 
