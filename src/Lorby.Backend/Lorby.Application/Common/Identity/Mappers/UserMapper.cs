@@ -9,5 +9,8 @@ public class UserMapper : Profile
     public UserMapper()
     {
         CreateMap<SignUpDetails, User>();
+
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
     }
 }

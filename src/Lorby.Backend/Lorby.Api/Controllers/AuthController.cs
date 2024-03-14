@@ -1,3 +1,4 @@
+using AutoMapper;
 using Lorby.Application.Common.Identity.Models;
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Application.Common.Notification.Services;
@@ -10,12 +11,14 @@ namespace Lorby.Api.Controllers;
 public class AuthController(
     IAuthService authService,
     IAccountService accountService,
-    IEmailOrchestrationService emailOrchestrationService) : ControllerBase
+    IEmailOrchestrationService emailOrchestrationService,
+    IMapper mapper) : ControllerBase
 {
     [HttpPost("SignUp")]
     public async ValueTask<IActionResult> SignUpAsync([FromBody] SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
     {
-        return Ok(await authService.SignUpAsync(signUpDetails, cancellationToken));
+        var user = await authService.SignUpAsync(signUpDetails, cancellationToken);
+        return Ok(mapper.Map<UserDto>(user));
     }
 
     [HttpPost("SignIn")]

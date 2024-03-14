@@ -1,7 +1,6 @@
 using System.Security.Authentication;
 using AutoMapper;
 using FluentValidation;
-using Lorby.Application.Common.Identity;
 using Lorby.Application.Common.Identity.Models;
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Domain.Entities;
@@ -18,7 +17,7 @@ public class AuthService(
     IAccessTokenRepository accessTokenRepository) 
     : IAuthService
 {
-    public async ValueTask<Guid> SignUpAsync(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
+    public async ValueTask<User> SignUpAsync(SignUpDetails signUpDetails, CancellationToken cancellationToken = default)
     {
         await ValidateUserExistence(signUpDetails, cancellationToken);
 
@@ -36,7 +35,7 @@ public class AuthService(
         
         var createdUser = await accountService.CreateUserAsync(user, cancellationToken);
 
-        return createdUser.Id;
+        return createdUser;
     }
 
     public async ValueTask<string> SignInAsync(SignInDetails signInDetails, CancellationToken cancellationToken = default)

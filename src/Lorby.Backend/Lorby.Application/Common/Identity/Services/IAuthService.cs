@@ -1,4 +1,5 @@
 using Lorby.Application.Common.Identity.Models;
+using Lorby.Domain.Entities;
 
 namespace Lorby.Application.Common.Identity.Services;
 
@@ -13,7 +14,7 @@ public interface IAuthService
     /// <param name="signUpDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public ValueTask<Guid> SignUpAsync(SignUpDetails signUpDetails,
+    public ValueTask<User> SignUpAsync(SignUpDetails signUpDetails,
         CancellationToken cancellationToken = default);
 
     /// <summary>
