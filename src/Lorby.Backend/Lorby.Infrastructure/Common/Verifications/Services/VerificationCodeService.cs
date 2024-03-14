@@ -36,8 +36,13 @@ public class VerificationCodeService(IVerificationCodeRepository verificationCod
     }
 
     public async ValueTask<VerificationCode> CreateAsync(Guid userId,
-                                                         CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
+        var oldCode = await GetByUserId(userId, cancellationToken);
+        
+        if (oldCode is not null)
+            await DeactivateAsync(oldCode.Id, cancellationToken: cancellationToken);
+        
         var verificationCode = new VerificationCode()
         {
             UserId = userId,
@@ -51,9 +56,16 @@ public class VerificationCodeService(IVerificationCodeRepository verificationCod
         return verificationCode;
     }
 
-    public ValueTask DeactivateAsync(Guid userId, bool saveChanges = true,
+    public ValueTask DeactivateAsync(Guid codeId, bool saveChanges = true,
                                      CancellationToken cancellationToken = default)
     {
-        return verificationCodeRepository.DeactivateAsync(userId, saveChanges, cancellationToken);
+        return verificationCodeRepository.DeactivateAsync(codeId, saveChanges, cancellationToken);
+    }
+
+    private async ValueTask<VerificationCode?> GetByUserId(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await verificationCodeRepository
+            .Get(code => code.UserId == userId)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }
