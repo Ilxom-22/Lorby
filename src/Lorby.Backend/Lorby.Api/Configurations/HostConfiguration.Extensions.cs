@@ -107,6 +107,25 @@ public static partial class HostConfiguration
     }
 
     /// <summary>
+    /// Configures CORS
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddCustomCors(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(options =>
+            options.AddPolicy("CorsPolicy", policyBuilder =>
+                policyBuilder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+            )
+        );
+
+        return builder;
+    }
+
+    /// <summary>
     /// Configures identity related services
     /// </summary>
     /// <param name="builder"></param>
@@ -155,7 +174,41 @@ public static partial class HostConfiguration
             .AddScoped<IAccountService, AccountService>()
             .AddScoped<IAuthService, AuthService>();
         
+        return builder;
+    }
+    
+    /// <summary>
+    /// Registers NotificationDbContext in DI 
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
+    {
+        // configure SmtpEmailSenderSettings 
+        builder.Services.Configure<SmtpEmailSenderSettings>(
+            builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)));
+
+        // register repositories
+        builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
         
+        // register brokers
+        builder.Services.AddTransient<IEmailSenderBroker, SmtpEmailSenderBroker>();
+        
+        // register services
+        builder.Services
+            .AddScoped<IEmailTemplateService, EmailTemplateService>()
+            .AddScoped<IEmailOrchestrationService, EmailOrchestrationService>();
+        
+        return builder;
+    }
+    
+    private static WebApplicationBuilder AddVerificationInfrastructure(this WebApplicationBuilder builder)
+    {
+        // register repositories
+        builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
+
+        // register services
+        builder.Services.AddScoped<IVerificationCodeService, VerificationCodeService>();
 
         return builder;
     }
@@ -184,41 +237,16 @@ public static partial class HostConfiguration
 
         return app;
     }
-    
+
     /// <summary>
-    /// Registers NotificationDbContext in DI 
+    /// Uses CORS
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="app"></param>
     /// <returns></returns>
-    private static WebApplicationBuilder AddNotificationInfrastructure(this WebApplicationBuilder builder)
+    private static WebApplication UseCustomCors(this WebApplication app)
     {
-        // configure SmtpEmailSenderSettings 
-        builder.Services.Configure<SmtpEmailSenderSettings>(
-            builder.Configuration.GetSection(nameof(SmtpEmailSenderSettings)));
+        app.UseCors("CorsPolicy");
 
-        // register repositories
-        builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
-        
-        // register brokers
-        builder.Services.AddTransient<IEmailSenderBroker, SmtpEmailSenderBroker>();
-        
-        // register services
-        builder.Services
-               .AddScoped<IEmailTemplateService, EmailTemplateService>()
-               .AddScoped<IEmailOrchestrationService, EmailOrchestrationService>();
-        
-        return builder;
+        return app;
     }
-    
-    private static WebApplicationBuilder AddVerificationInfrastructure(this WebApplicationBuilder builder)
-    {
-        // register repositories
-        builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
-
-        // register services
-        builder.Services.AddScoped<IVerificationCodeService, VerificationCodeService>();
-
-        return builder;
-    }
-
 }

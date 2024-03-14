@@ -5,6 +5,7 @@ public static partial class HostConfiguration
     public static ValueTask<WebApplicationBuilder> ConfigureAsync(this WebApplicationBuilder builder)
     {
         builder
+            .AddCustomCors()
             .AddDevTools()
             .AddMappers()
             .AddValidators()
@@ -27,6 +28,7 @@ public static partial class HostConfiguration
         await app.SeedDataAsync();
         
         app
+            .UseCustomCors()
             .UseDevTools()
             .UseExposers();
         
