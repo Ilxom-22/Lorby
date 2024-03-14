@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using FluentValidation;
+using Lorby.Api.Filters;
 using Lorby.Api.SeedData;
 using Lorby.Application.Common.Identity;
 using Lorby.Application.Common.Identity.Services;
@@ -9,9 +10,9 @@ using Lorby.Application.Common.Notification.Brokers;
 using Lorby.Application.Common.Notification.Services;
 using Lorby.Application.Common.Verifications.Services;
 using Lorby.Infrastructure.Common.Identity.Services;
+using Lorby.Infrastructure.Common.Notifications.Brokers;
+using Lorby.Infrastructure.Common.Notifications.Services;
 using Lorby.Infrastructure.Common.Verifications.Services;
-using Lorby.Infrastructure.Notifications.Brokers;
-using Lorby.Infrastructure.Notifications.Services;
 using Lorby.Infrastructure.Settings;
 using Lorby.Persistence.DataContext;
 using Lorby.Persistence.Repositories;
@@ -53,7 +54,7 @@ public static partial class HostConfiguration
     private static WebApplicationBuilder AddExposers(this WebApplicationBuilder builder)
     {
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(configs => configs.Filters.Add<ExceptionFilter>());
 
         return builder;
     }
