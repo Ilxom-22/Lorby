@@ -1,4 +1,4 @@
-namespace Lorby.Application.Common.Identity;
+namespace Lorby.Application.Common.Identity.Services;
 
 /// <summary>
 /// Service interface for password Hasher operations

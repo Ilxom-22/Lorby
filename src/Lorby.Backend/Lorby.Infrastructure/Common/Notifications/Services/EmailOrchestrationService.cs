@@ -7,7 +7,7 @@ using Lorby.Domain.Constants;
 using Lorby.Domain.Entities;
 using Lorby.Domain.Enums;
 
-namespace Lorby.Infrastructure.Notifications.Services;
+namespace Lorby.Infrastructure.Common.Notifications.Services;
 
 public class EmailOrchestrationService(
     IEmailTemplateService emailTemplateService,

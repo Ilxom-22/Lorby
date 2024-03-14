@@ -1,4 +1,5 @@
 using Lorby.Application.Common.Identity;
+using Lorby.Application.Common.Identity.Services;
 using BC = BCrypt.Net.BCrypt;
 
 namespace Lorby.Infrastructure.Common.Identity.Services;

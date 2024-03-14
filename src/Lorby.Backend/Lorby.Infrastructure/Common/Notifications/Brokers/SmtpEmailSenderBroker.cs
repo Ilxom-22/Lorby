@@ -5,7 +5,7 @@ using Lorby.Application.Common.Notification.Models;
 using Lorby.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 
-namespace Lorby.Infrastructure.Notifications.Brokers;
+namespace Lorby.Infrastructure.Common.Notifications.Brokers;
 
 /// <summary>
 /// Implementation of the IEmailSenderBroker interface using SMTP for sending email messages.

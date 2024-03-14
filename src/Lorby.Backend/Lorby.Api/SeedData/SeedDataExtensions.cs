@@ -10,16 +10,15 @@ public static class SeedDataExtensions
     public static async ValueTask InitializeSeedAsync(this IServiceProvider serviceProvider)
     {
         var appDbContext = serviceProvider.GetRequiredService<AppDbContext>();
-        var webHostEnvironment = serviceProvider.GetRequiredService<IWebHostEnvironment>();
         
         if (!await appDbContext.EmailTemplates.AnyAsync())
-            await appDbContext.SeedEmailTemplates(webHostEnvironment);
+            await appDbContext.SeedEmailTemplates();
 
         if (appDbContext.ChangeTracker.HasChanges())
             await appDbContext.SaveChangesAsync();
     }
     
-    private static async ValueTask SeedEmailTemplates(this AppDbContext appDbContext, IWebHostEnvironment webHostEnvironment)
+    private static async ValueTask SeedEmailTemplates(this AppDbContext appDbContext)
     {
         var emailTemplate = new EmailTemplate
         {

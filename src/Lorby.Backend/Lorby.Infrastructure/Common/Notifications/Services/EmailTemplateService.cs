@@ -5,7 +5,7 @@ using Lorby.Domain.Enums;
 using Lorby.Persistence.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lorby.Infrastructure.Notifications.Services;
+namespace Lorby.Infrastructure.Common.Notifications.Services;
 
 /// <summary>
 /// A service that provides functionality for managing email templates.
