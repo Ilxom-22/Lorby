@@ -26,4 +26,9 @@ public class VerificationCode : Entity
     /// Gets or sets the actual verification code.
     /// </summary>
     public string Code { get; set; } = default!;
+
+    /// <summary>
+    /// Represents User navigation property
+    /// </summary>
+    public User User { get; set; }
 }

@@ -23,4 +23,9 @@ public class AccessToken : Entity
     /// Gets or sets a flag indicating whether the access token is revoked.
     /// </summary>
     public bool IsRevoked { get; set; }
+
+    /// <summary>
+    /// Represents User navigation property
+    /// </summary>
+    public User User { get; set; }
 }
