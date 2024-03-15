@@ -88,9 +88,23 @@ public static partial class HostConfiguration
     /// <returns></returns>
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("LorbyDatabase"));
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString")));
 
         return builder;
+    }
+    
+    /// <summary>
+    /// Asynchronously migrates database schemas associated with the application.
+    /// </summary>
+    /// <param name="app">The WebApplication instance to configure.</param>
+    /// <returns>A ValueTask representing the asynchronous operation, with the WebApplication instance.</returns>
+    private static async ValueTask<WebApplication> MigrateDataBaseSchemasAsync(this WebApplication app)
+    {
+        var serviceScopeFactory = app.Services.GetRequiredKeyedService<IServiceScopeFactory>(null);
+
+        await serviceScopeFactory.MigrateAsync<AppDbContext>();
+
+        return app;
     }
     
     /// <summary>
