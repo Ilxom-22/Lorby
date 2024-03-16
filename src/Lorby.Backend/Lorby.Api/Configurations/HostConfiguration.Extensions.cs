@@ -89,9 +89,7 @@ public static partial class HostConfiguration
     /// <returns></returns>
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
-        var dbConnectionString = builder.Environment.IsDevelopment()
-            ? builder.Configuration.GetConnectionString("DbConnectionString")
-            : Environment.GetEnvironmentVariable("DbConnectionString");
+        var dbConnectionString = builder.Configuration.GetConnectionString("DbConnectionString");
         
         builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnectionString));
 
