@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Reflection;
 using System.Text;
 using FluentValidation;
@@ -88,7 +89,11 @@ public static partial class HostConfiguration
     /// <returns></returns>
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString")));
+        var dbConnectionString = builder.Environment.IsDevelopment()
+            ? builder.Configuration.GetConnectionString("DbConnectionString")
+            : Environment.GetEnvironmentVariable("DbConnectionString");
+        
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnectionString));
 
         return builder;
     }
