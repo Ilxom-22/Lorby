@@ -1,10 +1,8 @@
-using System.Data.Common;
 using System.Reflection;
 using System.Text;
 using FluentValidation;
 using Lorby.Api.Filters;
 using Lorby.Api.SeedData;
-using Lorby.Application.Common.Identity;
 using Lorby.Application.Common.Identity.Services;
 using Lorby.Application.Common.Identity.Settings;
 using Lorby.Application.Common.Notification.Brokers;
@@ -89,7 +87,9 @@ public static partial class HostConfiguration
     /// <returns></returns>
     private static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
-        var dbConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DbConnectionString");
+        var dbConnectionString = builder.Environment.IsDevelopment()
+            ? builder.Configuration.GetConnectionString("DbConnectionString")
+            : Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DbConnectionString");
         
         builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnectionString));
 
